@@ -14,7 +14,7 @@ const photos = [
 
 function App() {
   const [count, setCount] = useState(); 
-  const [inputs, setInputs] = useState();
+  const [inputs, setInputs] = useState({title:null, file:null, path:null});
   const [items, setItems] = useState(photos);
   const [isCollapsed, collapse] = useState(false);
 
@@ -46,6 +46,7 @@ function App() {
         </button>
         <div className="clearfix mb-4"></div>
         <UploadForm
+          inputs={inputs}
           isVisible={isCollapsed}
           handleOnChange={handleOnChange}
           handleOnSubmit={handleOnSubmit}

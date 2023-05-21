@@ -1,4 +1,11 @@
-export default function UploadForm({isVisible, handleOnChange, handleOnSubmit}) {
+import { useMemo } from "react";
+
+export default function UploadForm({inputs, isVisible, handleOnChange, handleOnSubmit}) {
+
+    const isDisabled = useMemo(()=>{
+        // if any value in the input object is null, return true
+        return !!Object.values(inputs).some(input => !input)
+    }, [inputs])
   return (
    isVisible && <>
     <p className="display-6 text-center mb-3">Upload Stock Image</p>
@@ -23,7 +30,7 @@ export default function UploadForm({isVisible, handleOnChange, handleOnSubmit}) 
           name="file"
         /> 
       </div>
-      <button type="submit" className="btn btn-success float-end">
+      <button type="submit" className="btn btn-success float-end" disabled={isDisabled}>
         Save Changes
       </button>
     </form>
