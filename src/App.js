@@ -30,6 +30,10 @@ function App() {
   const handleOnSubmit = (e) =>{
     e.preventDefault()
     setItems([inputs.path,...items])
+    // clear input after submit
+    setInputs({title:null, file:null, path:null})
+    // then set collapse to false
+    collapse(false)
   } ;
 
   useEffect(()=>{
