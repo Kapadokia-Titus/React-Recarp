@@ -15,13 +15,38 @@ const initialState = {
   isCollapsed: false,
 };
 
+// imputs handler
+const handleOnChange = (state, e) => {
+  if (e.target.name === "file") {
+    // method that saves files from a computer
+    return{
+      ...state.inputs,
+      file: e.target.files[0],
+      path: URL.createObjectURL(e.target.files[0]),
+    };
+  } else {
+    // method that saves files from a computer
+    return{ ...state.inputs, title: e.target.value };
+  }
+};
+
 // reducer funciton
 function reducer(state, action) {
   switch (action.type) {
     case "setItem":
       return {
         ...state,
-        items:[action.payload.path, ...state.items]
+        items:[state.inputs, ...state.items]
+      };
+    case "setInputs":
+      return {
+        ...state,
+        inputs:handleOnChange(state, action.payload.value)
+      };
+    case "collapse":
+      return {
+        ...state,
+        isCollapsed:action.payload.bool
       };
     default : return state; 
   }
@@ -30,55 +55,36 @@ function App() {
   // use useReducer instead of useState, that r3eturns current state and dispatch
   const [state, dispatch] = useReducer(reducer, initialState);
   const [count, setCount] = useState();
-  const [inputs, setInputs] = useState({ title: null, file: null, path: null });
-  const [items, setItems] = useState(photos);
-  const [isCollapsed, collapse] = useState(false);
 
-  const handleOnChange = (e) => {
-    if (e.target.name === "file") {
-      // method that saves files from a computer
-      setInputs({
-        ...inputs,
-        file: e.target.files[0],
-        path: URL.createObjectURL(e.target.files[0]),
-      });
-    } else {
-      // method that saves files from a computer
-      setInputs({ ...inputs, title: e.target.value });
-    }
-  };
+  const handleOnChange = (e) => dispatch({type: 'setInputs', payload: {value: e}})
+  const toggle = (bool) => dispatch({type:"collapse", payload: {bool}});
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     // setItems([inputs.path, ...items]);
     // the above is replaced by dispatcg
-    dispatch({type:'setItem', payload:{path : inputs}})
-    // clear input after submit
-    setInputs({ title: null, file: null, path: null });
+    dispatch({type:'setItem'})
     // then set collapse to false
-    collapse(false);
+    toggle(!state.isCollapsed);
   };
 
-  // to handle the reducer hook
-  useEffect(() => {
-    console.log(state);
-  });
 
   useEffect(() => {
     setCount(`you have ${state.items.length} image${state.items.length > 1 ? "s" : ""}`);
   }, [state.items]);
 
-  const toggle = () => collapse(!isCollapsed);
+  
   return (
     <>
       <Navbar />
       <div class="container text-center mt-5">
         <button className="btn btn-success float-end" onClick={toggle}>
-          {isCollapsed ? "Hide Form" : "+Add"}
+          {state.isCollapsed ? "Hide Form" : "+Add"}
         </button>
         <div className="clearfix mb-4"></div>
         <UploadForm
-          inputs={inputs}
-          isVisible={isCollapsed}
+          inputs={state.inputs}
+          isVisible={state.isCollapsed}
           handleOnChange={handleOnChange}
           handleOnSubmit={handleOnSubmit}
         />
