@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import "./App.css";
 import Card from "./components/Card";
 import Layout from "./components/Layout";
@@ -36,6 +36,8 @@ function reducer(state, action) {
       return {
         ...state,
         items: [state.inputs, ...state.items],
+        count: state.items.length +1 ,
+        inputs:{ title: null, file: null, path: null },
       };
     case "setInputs":
       return {
@@ -54,7 +56,6 @@ function reducer(state, action) {
 function App() {
   // use useReducer instead of useState, that r3eturns current state and dispatch
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [count, setCount] = useState();
 
   const handleOnChange = (e) =>
     dispatch({ type: "setInputs", payload: { value: e } });
@@ -69,12 +70,12 @@ function App() {
     toggle(!state.isCollapsed);
   };
 
-  useEffect(() => {
-    setCount(
-      `you have ${state.items.length} image${state.items.length > 1 ? "s" : ""}`
-    );
-  }, [state.items]);
+  // update count using a memoised value
+  const count  = useMemo(()=>{
+     return `you have ${state.items.length} image${state.items.length > 1 ? "s" : ""}`
+  }, [state.items])
 
+  
   return (
     <Layout
       onChange={handleOnChange}
@@ -82,11 +83,11 @@ function App() {
       toggle={toggle}
       state={state}
     >
-      <h1>Gallery</h1>
+      <h1 className="text-center">Gallery</h1>
       {count}
       <div className="row mt-2">
-        {state.items.map((photo, index) => (
-          <Card key={index} src={photo} />
+        {state.items.map((item, index) => (
+          <Card key={index} {...item} />
         ))}
       </div>
     </Layout>

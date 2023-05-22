@@ -1,11 +1,11 @@
-export default function Card({src}) {
+export default function Card({path, title}) {
   return (
     <div className="col mb-5">
       <div class="card" style={{ width: "18rem" }}>
         <img
-          src={src.path}
+          src={path}
           class="card-img-top"
-          alt={src}
+          alt={title}
         />
       </div>
     </div>
