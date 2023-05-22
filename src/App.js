@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import "./App.css";
 import Card from "./components/Card";
 import Navbar from "./components/Navbar";
@@ -13,6 +13,8 @@ const photos = [
 ];
 
 function App() {
+  // use useReducer instead of useState
+  // const [] = useReducer(reducer, initialState)
   const [count, setCount] = useState(); 
   const [inputs, setInputs] = useState({title:null, file:null, path:null});
   const [items, setItems] = useState(photos);
