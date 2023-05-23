@@ -9,7 +9,7 @@ const Firestore = {
     const randomIndex = Math.floor(Math.random() * 10000000000)
       try {
         const docRef = doc(db, "stocks", `${randomIndex}`);
-        await setDoc(docRef, {...inputs, createdAt: serverTimestamp()});
+        await setDoc(docRef, {title:inputs.title,path: inputs.path , createdAt: serverTimestamp()});
         resolve ('new doc successfully inserted')
       } catch (e) {
         // Error handling code goes here
@@ -17,3 +17,5 @@ const Firestore = {
     });
   },
 };
+
+export default Firestore; 

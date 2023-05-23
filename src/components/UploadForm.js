@@ -1,5 +1,8 @@
 import { useContext, useMemo } from "react";
 import { Context } from "../context";
+import Firestore from "../handlers/firestore";
+
+const {writeDoc} = Firestore
 
 // a function that allows us to preview data
 function Preview({ path }) {
@@ -19,7 +22,18 @@ function Preview({ path }) {
 
 export default function UploadForm() {
   // create a context
-  const {state, handleOnChange, handleOnSubmit } = useContext(Context)
+  const {state, handleOnChange, dispatch } = useContext(Context)
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    writeDoc(state.inputs, "stock").then(console.log)
+    // setItems([inputs.path, ...items]);
+    // the above is replaced by dispatcg
+    dispatch({ type: "setItem" });
+    // then set collapse to false
+    dispatch({type:"collapse", payload: !state.isCollapsed});
+  };
+
+
   const isDisabled = useMemo(() => {
     // if any value in the input object is null, return true
     return !!Object.values(state.inputs).some((input) => !input);
