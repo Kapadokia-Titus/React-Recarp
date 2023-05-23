@@ -3,7 +3,6 @@ import "./App.css";
 import Card from "./components/Card";
 import Layout from "./components/Layout";
 import { Context } from "./context";
-import app from "./lib/firebase.config";
 
 
 function App() {
@@ -17,9 +16,7 @@ function App() {
      return `you have ${state.items.length} image${state.items.length > 1 ? "s" : ""}`
   }, [state.items])
 
-  useEffect(()=>{
-    app()
-  })
+
   
   return (
     <Layout>
