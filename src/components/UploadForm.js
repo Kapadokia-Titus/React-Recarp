@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
+import { Context } from "../context";
 
 // a function that allows us to preview data
 function Preview({ path }) {
@@ -16,22 +17,19 @@ function Preview({ path }) {
   );
 }
 
-export default function UploadForm({
-  inputs,
-  isVisible,
-  handleOnChange,
-  handleOnSubmit,
-}) {
+export default function UploadForm() {
+  // create a context
+  const {state, handleOnChange, handleOnSubmit } = useContext(Context)
   const isDisabled = useMemo(() => {
     // if any value in the input object is null, return true
-    return !!Object.values(inputs).some((input) => !input);
-  }, [inputs]);
+    return !!Object.values(state.inputs).some((input) => !input);
+  }, [state.inputs]);
   return (
-    isVisible && (
+    state.isCollapsed && (
       <>
         <p className="display-6 text-center mb-3">Upload Stock Image</p>
         <div className="mb-5 d-flex align-items-center justify-content-center">
-          <Preview {...inputs} />
+          <Preview {...state.inputs} />
           <form
             className="mb-2"
             style={{ textAlign: "left" }}

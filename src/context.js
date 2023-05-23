@@ -1,9 +1,8 @@
 import { createContext, useReducer } from "react";
 
-export const Context = createContext()
+export const Context = createContext();
 
-const photos = [
-];
+const photos = [];
 
 // set initial state
 const initialState = {
@@ -35,8 +34,8 @@ function reducer(state, action) {
       return {
         ...state,
         items: [state.inputs, ...state.items],
-        count: state.items.length +1 ,
-        inputs:{ title: null, file: null, path: null },
+        count: state.items.length + 1,
+        inputs: { title: null, file: null, path: null },
       };
     case "setInputs":
       return {
@@ -52,10 +51,26 @@ function reducer(state, action) {
       return state;
   }
 }
- 
-const Provider =({children}) =>{ 
-    // use useReducer instead of useState, that returns current state and dispatch
-    const [state, dispatch] = useReducer(reducer, initialState);
-    return <Context.Provider value={{state, dispatch}}>{children}</Context.Provider>
-}
-export default Provider; 
+
+const Provider = ({ children }) => {
+
+    //onChange
+  const handleOnChange = (e) =>
+    dispatch({ type: "setInputs", payload: { value: e } });
+  const toggle = (bool) => dispatch({ type: "collapse", payload: { bool } });
+    // onSubmit
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    // setItems([inputs.path, ...items]);
+    // the above is replaced by dispatcg
+    dispatch({ type: "setItem" });
+    // then set collapse to false
+    toggle(!state.isCollapsed);
+  };
+  // use useReducer instead of useState, that returns current state and dispatch
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <Context.Provider value={{ state, handleOnChange, handleOnSubmit, toggle }}>{children}</Context.Provider>
+  );
+};
+export default Provider;
