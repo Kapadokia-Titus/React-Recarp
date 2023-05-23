@@ -3,7 +3,9 @@ import "./App.css";
 import Card from "./components/Card";
 import Layout from "./components/Layout";
 import { Context } from "./context";
+import Firestore from "./handlers/firestore";
 
+const {readDocs} = Firestore
 
 function App() {
 
@@ -16,7 +18,9 @@ function App() {
      return `you have ${state.items.length} image${state.items.length > 1 ? "s" : ""}`
   }, [state.items])
 
-
+  useEffect(()=>{
+    readDocs().then(console.log)
+  },[])
   
   return (
     <Layout>
