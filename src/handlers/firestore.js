@@ -3,6 +3,7 @@ import app, { db } from "../lib/firebase.config";
 
 const Firestore = {
   readDocs: (...args) => {
+    const [collection_name] = args; 
     let docs =[]
     const ref = collection(db, "stocks")
     return new Promise(async resolve =>{

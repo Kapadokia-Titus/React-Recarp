@@ -3,14 +3,11 @@ import "./App.css";
 import Card from "./components/Card";
 import Layout from "./components/Layout";
 import { Context } from "./context";
-import Firestore from "./handlers/firestore";
-
-const {readDocs} = Firestore
 
 function App() {
 
   // use the useContext hook to consume the stateful value
-  const {state} = useContext(Context)
+  const {state,read} = useContext(Context)
 
 
   // update count using a memoised value
@@ -19,7 +16,7 @@ function App() {
   }, [state.items])
 
   useEffect(()=>{
-    readDocs().then(console.log)
+    read()
   },[])
   
   return (
